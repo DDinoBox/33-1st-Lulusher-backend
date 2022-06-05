@@ -6,7 +6,7 @@
 룰루레몬(https://shop.lululemon.com)
 
 ## 작업 기간
-2022.05.23 ~ 2022. 06. 03
+2022. 05. 23 ~ 2022. 06. 03
 
 ## 팀명
 신난아이셔(luluIsher)
@@ -19,7 +19,7 @@
 | 백엔드     | 이예은, 최혜인                 |
 
 ## 기술 스택
-FrontEnd - HTML/CSS, JavaScript, React.js , React-Router, React-Router-DOM, Sass
+FrontEnd - HTML/CSS, JavaScript, React.js , React-Router, React-Router-DOM, Sass </br>
 BackEnd - Python, Django, MySQL, Bcrypt, pyJWT
 
 ## 프론트 엔드 업무 담당
