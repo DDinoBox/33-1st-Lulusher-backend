@@ -1,6 +1,6 @@
 from django.db    import models
 
-from core import TimeStampModel
+from core.models import TimeStampModel
 
 class Menu(models.Model):
     name = models.CharField(max_length=30)
@@ -65,7 +65,7 @@ class ProductOptionImage(TimeStampModel):
 
 class Activity(TimeStampModel): 
     activity_name = models.CharField(max_length=30)
-    products      = models.ManyToManyField('Product', through="ProductActivity")
+    products      = models.ManyToManyField('Product', through='ProductActivity')
     
     class Meta:
         db_table = 'activities'

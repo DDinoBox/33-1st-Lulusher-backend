@@ -1,13 +1,12 @@
 import json
 from json.decoder import JSONDecodeError
 
-from django.http import JsonResponse
-from django.views import View
+from django.http      import JsonResponse
+from django.views     import View
 from django.db.models import Q, Avg
 
-from utils import login_decorator
+from core.utils      import login_decorator
 from products.models import Menu, Product, Review
-
 
 class MenuListView(View):
     def get(self, request):
@@ -27,25 +26,24 @@ class MenuListView(View):
                 } for sub_category in main_category.subcategory_set.all()]
             } for main_category in menu.maincategory_set.all()]
         } for menu in menus]
-
+        
         return JsonResponse({'results': results}, status=200)
 
-
 class ProductListView(View):
-    def get(self, request):
-        offset = int(request.GET.get('offset', 0))
-        limit = int(request.GET.get('limit', 9))
-        sort = request.GET.get('sort', 'id')
-        menu = request.GET.get('menu')
-        main_category = request.GET.get('main_category')
-        sub_category = request.GET.getlist('sub_category')
-        color = request.GET.getlist('color')
-        size = request.GET.getlist('size')
-        is_new = request.GET.get('is_new')
-        is_bestseller = request.GET.get('is_bestseller')
+    def get(self, request): 
+        offset         = int(request.GET.get('offset', 0))
+        limit          = int(request.GET.get('limit', 9))
+        sort           = request.GET.get('sort', 'id')
+        menu           = request.GET.get('menu')
+        main_category  = request.GET.get('main_category')
+        sub_category   = request.GET.getlist('sub_category')
+        color          = request.GET.getlist('color')
+        size           = request.GET.getlist('size')
+        is_new         = request.GET.get('is_new')
+        is_bestseller  = request.GET.get('is_bestseller')
         summer_clothes = request.GET.get('summer_clothes')
-        activity = request.GET.getlist('activity')
-        search = request.GET.get('search')
+        activity       = request.GET.getlist('activity')
+        search         = request.GET.get('search')
 
         q = Q()
 
@@ -80,10 +78,10 @@ class ProductListView(View):
             q &= Q(name__icontains=search)
 
         sort_set = {
-            "id": "id",
-            "name": "name",
-            "price": "price",
-            "-price": "-price"
+            'id': 'id',
+            'name': 'name',
+            'price': 'price',
+            '-price': '-price'
         }
 
         products = Product.objects.filter(q).distinct().order_by(sort_set[sort])[offset:offset+limit]
@@ -106,15 +104,14 @@ class ProductListView(View):
             } for product_option in product.productoption_set.all()]
         } for product in products
         ]
-
-        return JsonResponse({"results": results}, status=200)
-
+        
+        return JsonResponse({'results': results}, status=200)
 
 class ProductDetailView(View):
     def get(self, request, product_id):
         if not Product.objects.filter(id=product_id).exists():
-            return JsonResponse({'Message': 'PRODUCT_DOES_NOT_EXIST'}, status=404)
-
+            return JsonResponse({'message': 'PRODUCT_DOES_NOT_EXIST'}, status=404)
+        
         results = [{
             'menu': product.sub_category.main_category.menu.name,
             'main_category': product.sub_category.main_category.name,
@@ -135,9 +132,8 @@ class ProductDetailView(View):
                 'product_option_images': [image.image_url for image in product_option.productoptionimage_set.all()]
             } for product_option in product.productoption_set.all()]
         }for product in Product.objects.filter(id=product_id)]
-
-        return JsonResponse({"results": results}, status=200)
-
+        
+        return JsonResponse({'results': results}, status=200)
 
 class ReviewView(View):
     @login_decorator
@@ -147,56 +143,56 @@ class ReviewView(View):
             user = request.user
             content = data['content']
             rating = data['rating']
-
+            
             product = Product.objects.get(id=product_id)
-
+            
             Review.objects.create(
                 content=content,
                 user=user,
                 rating=rating,
                 product=product,
             )
-
-            return JsonResponse({'Message': 'SUCCESS'}, status=200)
-
+            
+            return JsonResponse({'message': 'SUCCESS'}, status=200)
+        
         except KeyError:
-            return JsonResponse({'Message': 'KEY_ERROR'}, status=400)
-
+            return JsonResponse({'message': 'KEY_ERROR'}, status=400)
+        
         except Product.DoesNotExist:
-            return JsonResponse({'Message': 'PRODUCT_DOES_NOT_EXIST'}, status=404)
-
+            return JsonResponse({'message': 'PRODUCT_DOES_NOT_EXIST'}, status=404)
+        
     def get(self, request, product_id):
         offset = int(request.GET.get('offset', 0))
         limit = int(request.GET.get('limit', 3))
         review_list = [{
-            "id": review.id,
-            "username": review.user.name,
-            "content": review.content,
-            "rating": review.rating,
-            "create_at": review.created_at,
+            'id': review.id,
+            'username': review.user.name,
+            'content': review.content,
+            'rating': review.rating,
+            'create_at': review.created_at,
         } for review in Review.objects.filter(product_id=product_id)[offset:offset+limit]
         ]
         review_count = Review.objects.filter(product_id=product_id).count()
         rating_average = Review.objects.filter(
             product_id=product_id).aggregate(Avg('rating'))
-
+        
         return JsonResponse({'data': review_list, 'review_count': review_count, 'rating_average': rating_average}, status=200)
-
+    
     @login_decorator
     def delete(self, request, product_id, review_id):
         Review.objects.filter(id=review_id, user_id=request.user.id).delete()
-        return JsonResponse({'Message': 'NO_CONTENT'}, status=200)
+        return JsonResponse({'message': 'NO_CONTENT'}, status=200)
 
     @login_decorator
     def patch(self, request, product_id, review_id):
         if not Review.objects.filter(id=review_id, user_id=request.user.id).exists():
-            return JsonResponse({'Message': 'REVIEW_DOES_NOT_EXIST'}, status=404)
-
+            return JsonResponse({'message': 'REVIEW_DOES_NOT_EXIST'}, status=404)
+        
         data = json.loads(request.body)
         review = Review.objects.get(id=review_id, user_id=request.user.id)
-
+        
         review.rating = data['rating'] if data['rating'] else review.rating
         review.content = data['content'] if data['content'] else review.content
         review.save()
-
-        return JsonResponse({'Message': 'SUCCESS'}, status=200)
+        
+        return JsonResponse({'message': 'SUCCESS'}, status=200)

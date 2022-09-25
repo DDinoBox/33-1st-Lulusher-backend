@@ -1,6 +1,6 @@
-from django.db       import models
+from django.db import models
 
-from core           import TimeStampModel
+from core.models import TimeStampModel
 
 class User(TimeStampModel):
     name            = models.CharField(max_length=100)
@@ -11,4 +11,4 @@ class User(TimeStampModel):
     email_subscribe = models.BooleanField(default=False)
 
     class Meta: 
-        db_table = "users"
+        db_table = 'users'

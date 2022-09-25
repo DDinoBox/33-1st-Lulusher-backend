@@ -6,7 +6,7 @@ from django.core.exceptions import MultipleObjectsReturned
 from django.views           import View
 
 from .models         import Cart
-from utils           import login_decorator
+from core.utils      import login_decorator
 from products.models import Product, ProductOption
 
 class CartView(View):
@@ -83,7 +83,7 @@ class CartView(View):
 
             cart.quantity = data['quantity']
             cart.save()
-            return JsonResponse({'Message' : 'SUCCESS'}, status=200)
+            return JsonResponse({'message' : 'SUCCESS'}, status=200)
 
         except MultipleObjectsReturned:
             return JsonResponse({'message' : 'MULTIPLE_OBJECTS_RETURNED'}, status=400)
@@ -95,4 +95,4 @@ class CartView(View):
     @login_decorator
     def delete(self,request,cart_id):
         Cart.objects.filter(id = cart_id, user_id = request.user.id).delete()
-        return JsonResponse({'Message' : 'NO_CONTENT'}, status = 200)
+        return JsonResponse({'' : 'NO_CONTENT'}, status = 200)
