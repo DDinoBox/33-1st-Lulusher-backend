@@ -62,5 +62,7 @@ Python, Django, MySQL, Bcrypt, PyJWT
 - 상품 리뷰 및 별점 작성, 리뷰 총 개수, 별점 평균, 가져오기, 삭제하기 구현
 - 장바구니 담기, 가져오기, 장바구니 페이지에서 수정하기, 삭제 하기 구현
 
+### API DOC
+<a href="https://hyein-resume.notion.site/luluisher-API-015bd54be37f4e25a75f1a1feb48d559">노션</a> 을 이용헤 엔드포인트 정의 및 공유
 ## 시연영상
 [![시연영상](https://img.youtube.com/vi/W34uDKZyf1s/0.jpg)](https://www.youtube.com/embed/W34uDKZyf1s)
