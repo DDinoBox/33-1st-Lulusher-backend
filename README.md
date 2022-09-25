@@ -3,7 +3,7 @@
 ![luluisher](https://velog.velcdn.com/images/sorin44/post/223b6137-92f2-414f-bc37-b78b8b69381c/image.jpg)
 
 ## 참고 사이트
-룰루레몬(https://shop.lululemon.com)
+<a href="https://shop.lululemon.com">룰루레몬</a> (의류 쇼핑몰)
 
 <br>
 
@@ -30,7 +30,7 @@
 ## 개발기간 및 팀원
 
 ### 개발기간
-2022.05.23 ~ 2022.06.03
+2022.05. ~ 2022.06.
 
 ### 팀명
 신난아이셔(luluIsher)
